@@ -1,6 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { Chart, Title, Tooltip, Legend, BarElement, LineElement, PointElement, LineController, CategoryScale, LinearScale, PieController, ArcElement } from 'chart.js';
+
 Chart.register(Title, Tooltip, Legend, LineElement, PointElement, LineController, CategoryScale, LinearScale, PieController, ArcElement);
 
 const sample = ref(null);
