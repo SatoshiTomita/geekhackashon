@@ -7,6 +7,7 @@ import NavigationButtons from "~/components/NavigationButtons.vue";
 import { useFireStore } from "~/composables/useFireStore";
 import { useGoalManagement } from "~/composables/useGoalManagement";
 import { useStripe } from "~/composables/useStripe";
+import { useDepositPayment } from "~/composables/useDepositPayment";
 
 // ルートパラメータからuserIdを取得
 const route = useRoute();
@@ -46,6 +47,9 @@ const {
 
 // Stripe composable
 const { hasActiveSubscription, checkSubscription } = useStripe();
+
+// 担保支払い composable
+const { createDepositPayment, processRefund } = useDepositPayment();
 
 // Todoの型定義
 type TodoWithId = TodoDoc & {
@@ -103,6 +107,7 @@ const todoTask = ref("");
 const todoIsFinished = ref(false);
 const todoWeight = ref<number | undefined>(undefined);
 const goalTitle = ref("");
+const goalDepositAmount = ref<number | undefined>(undefined);
 const saving = ref(false);
 
 // Firestoreからデータを取得
@@ -304,10 +309,11 @@ const saveTodo = async () => {
 // 目標を追加・編集モーダルを開く
 const openGoalModal = (goalId?: string, title?: string) => {
   editingGoal.value = {
-    goalId,
+    goalId: goalId || undefined,
     title: title || "",
   };
   goalTitle.value = title || "";
+  goalDepositAmount.value = undefined; // 編集時は担保金額をリセット
   showGoalModal.value = true;
 };
 
@@ -316,6 +322,7 @@ const closeGoalModal = () => {
   showGoalModal.value = false;
   editingGoal.value = null;
   goalTitle.value = "";
+  goalDepositAmount.value = undefined;
 };
 
 // 目標を保存
@@ -334,6 +341,7 @@ const saveGoal = async () => {
 
   try {
     saving.value = true;
+    
     if (editingGoal.value?.goalId) {
       // 更新
       await updateGoalWithSubscription(
@@ -344,15 +352,44 @@ const saveGoal = async () => {
           title: goalTitle.value,
         },
       );
+      closeGoalModal();
+      await fetchRoadmapData();
     } else {
       // 追加
-      await addGoalWithSubscription(userId, selectedCategoryId.value, {
+      // 追加
+      const result = await addGoalWithSubscription(userId, selectedCategoryId.value, {
         title: goalTitle.value,
         ratio: 0,
       });
+      
+      // 担保金額が入力されている場合、支払いフローを開始
+      if (goalDepositAmount.value && goalDepositAmount.value > 0 && result.goalId) {
+        try {
+          const depositResult = await createDepositPayment(
+            userId,
+            selectedCategoryId.value,
+            result.goalId,
+            goalDepositAmount.value,
+          );
+          
+          // Stripe Checkoutにリダイレクト
+          if (depositResult.url) {
+            window.location.href = depositResult.url;
+            return; // リダイレクトするので、ここで処理を終了
+          }
+        } catch (depositErr: any) {
+          console.error("担保支払いエラー:", depositErr);
+          error.value = `目標は作成されましたが、担保支払いに失敗しました: ${depositErr?.message || "不明なエラー"}`;
+          // 目標は作成されているので、モーダルを閉じてデータを再取得
+          closeGoalModal();
+          await fetchRoadmapData();
+          return;
+        }
+      }
+      
+      closeGoalModal();
+      await fetchRoadmapData();
     }
-    closeGoalModal();
-    await fetchRoadmapData();
   } catch (err: any) {
     console.error("Error saving goal:", err);
     error.value = err?.message || "目標の保存に失敗しました";
@@ -410,6 +447,11 @@ const toggleTodoCompletion = async (
 
     // 達成率を再計算
     await calculateAndUpdateGoalRatio(userId, selectedCategoryId.value, goalId);
+    
+    // 返金処理を実行（バックグラウンドで実行、エラーは無視）
+    processRefund(userId, selectedCategoryId.value, goalId).catch((err) => {
+      console.error('返金処理エラー:', err);
+    });
 
     // UIを更新
     const goal = goals.value.find((g) => g.id === goalId);
@@ -638,7 +680,7 @@ const handleDeleteTodo = async (
         :key="goal.id"
         :goal="goal"
         :saving="saving"
-        @edit-goal="openGoalModal"
+        @edit-goal="(goalId: string, title: string) => openGoalModal(goalId, title)"
         @delete-goal="handleDeleteGoal"
         @add-step="(goalId: string) => openStepModal(goalId)"
         @add-todo="(goalId: string) => openTodoModal(goalId)"
@@ -766,6 +808,22 @@ const handleDeleteTodo = async (
             class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="目標のタイトルを入力"
           />
+        </div>
+        <div v-if="!editingGoal?.goalId" class="mb-4">
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            担保金額（円、任意）
+          </label>
+          <input
+            v-model.number="goalDepositAmount"
+            type="number"
+            min="0"
+            step="1"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="目標達成に応じて返金されます（25%ずつ）"
+          />
+          <p class="mt-1 text-xs text-gray-500">
+            担保金額を設定すると、目標達成率に応じて25%ずつ返金されます
+          </p>
         </div>
         <div class="flex justify-end gap-3">
           <button

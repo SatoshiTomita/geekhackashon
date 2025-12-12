@@ -41,7 +41,7 @@ export const useGoalManagement = () => {
     userId: string,
     categoryId: string,
     goalData: Goal,
-  ): Promise<string> => {
+  ): Promise<{ goalId: string }> => {
     try {
       loading.value = true;
       error.value = null;
@@ -53,7 +53,9 @@ export const useGoalManagement = () => {
       });
 
       if (result.data && (result.data as any).success) {
-        return (result.data as any).goalId;
+        return {
+          goalId: (result.data as any).goalId,
+        };
       } else {
         throw new Error("目標の追加に失敗しました");
       }

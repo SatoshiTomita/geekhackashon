@@ -154,7 +154,18 @@ export const deleteGoal = onCall(
     }
 
     // サブスクリプション状態を確認
-    const hasActiveSubscription = await checkUserSubscription(userId);
+    let hasActiveSubscription = false;
+    try {
+      hasActiveSubscription = await checkUserSubscription(userId);
+    } catch (subError: any) {
+      console.error('サブスクリプション確認エラー:', subError);
+      // サブスクリプション確認エラーは無視して続行（開発環境ではStripe APIが利用できない場合がある）
+      // 本番環境では適切にエラーを返すべき
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error(`サブスクリプション確認に失敗しました: ${subError.message}`);
+      }
+    }
+    
     if (!hasActiveSubscription) {
       throw new Error('目標を削除するには有効なサブスクリプションが必要です');
     }
@@ -169,6 +180,46 @@ export const deleteGoal = onCall(
         .collection('goals')
         .doc(goalId);
 
+      // 目標が存在するか確認
+      const goalSnap = await goalRef.get();
+      if (!goalSnap.exists) {
+        return {
+          success: true,
+          message: '目標は既に削除されています',
+        };
+      }
+
+      // サブコレクションを再帰的に削除する関数
+      const deleteSubcollections = async (parentRef: admin.firestore.DocumentReference) => {
+        try {
+          // stepsコレクションを削除
+          const stepsRef = parentRef.collection('steps');
+          const stepsSnap = await stepsRef.get();
+          
+          for (const stepDoc of stepsSnap.docs) {
+            // 各ステップのサブコレクションを再帰的に削除
+            await deleteSubcollections(stepDoc.ref);
+            // ステップ自体を削除
+            await stepDoc.ref.delete();
+          }
+
+          // todoコレクションを削除
+          const todosRef = parentRef.collection('todo');
+          const todosSnap = await todosRef.get();
+          
+          for (const todoDoc of todosSnap.docs) {
+            await todoDoc.ref.delete();
+          }
+        } catch (subError: any) {
+          // サブコレクションの削除エラーはログに記録するが、処理は続行
+          console.error('サブコレクション削除エラー:', subError);
+        }
+      };
+
+      // サブコレクションを削除
+      await deleteSubcollections(goalRef);
+
+      // 目標自体を削除
       await goalRef.delete();
 
       return {
