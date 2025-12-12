@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import type { TodoDoc } from "../../../../@types/todoDoc";
 import GoalCard from "~/components/GoalCard.vue";
 import NavigationButtons from "~/components/NavigationButtons.vue";
 import { useFireStore } from "~/composables/useFireStore";
+import { useGoalManagement } from "~/composables/useGoalManagement";
+import { useStripe } from "~/composables/useStripe";
 
 // ルートパラメータからuserIdを取得
 const route = useRoute();
+const router = useRouter();
 const userId = route.params.userId as string;
 
 // カテゴリの定義
@@ -30,12 +33,19 @@ const {
   addTodo,
   updateTodo,
   deleteTodo,
-  addGoal,
-  updateGoal,
-  deleteGoal,
   calculateAndUpdateGoalRatio,
   getCategoryRatio,
 } = useFireStore();
+
+// Goal管理（課金チェック付き）
+const {
+  addGoal: addGoalWithSubscription,
+  updateGoal: updateGoalWithSubscription,
+  deleteGoal: deleteGoalWithSubscription,
+} = useGoalManagement();
+
+// Stripe composable
+const { hasActiveSubscription, checkSubscription } = useStripe();
 
 // Todoの型定義
 type TodoWithId = TodoDoc & {
@@ -122,7 +132,9 @@ const changeCategory = (categoryId: string) => {
 };
 
 // コンポーネントマウント時にデータを取得
-onMounted(() => {
+onMounted(async () => {
+  // サブスクリプション状態を確認
+  await checkSubscription(userId);
   fetchRoadmapData();
 });
 
@@ -312,11 +324,19 @@ const saveGoal = async () => {
     return;
   }
 
+  // 課金状態を確認
+  if (hasActiveSubscription.value !== true) {
+    error.value = "目標を設定するには有効なサブスクリプションが必要です";
+    closeGoalModal();
+    router.push(`/users/${userId}/subscription`);
+    return;
+  }
+
   try {
     saving.value = true;
     if (editingGoal.value?.goalId) {
       // 更新
-      await updateGoal(
+      await updateGoalWithSubscription(
         userId,
         selectedCategoryId.value,
         editingGoal.value.goalId,
@@ -326,7 +346,7 @@ const saveGoal = async () => {
       );
     } else {
       // 追加
-      await addGoal(userId, selectedCategoryId.value, {
+      await addGoalWithSubscription(userId, selectedCategoryId.value, {
         title: goalTitle.value,
         ratio: 0,
       });
@@ -351,9 +371,16 @@ const handleDeleteGoal = async (goalId: string) => {
     return;
   }
 
+  // 課金状態を確認
+  if (hasActiveSubscription.value !== true) {
+    error.value = "目標を削除するには有効なサブスクリプションが必要です";
+    router.push(`/users/${userId}/subscription`);
+    return;
+  }
+
   try {
     saving.value = true;
-    await deleteGoal(userId, selectedCategoryId.value, goalId);
+    await deleteGoalWithSubscription(userId, selectedCategoryId.value, goalId);
     await fetchRoadmapData();
   } catch (err: any) {
     console.error("Error deleting goal:", err);
@@ -540,8 +567,17 @@ const handleDeleteTodo = async (
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-4">
           <button
-            class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            v-if="hasActiveSubscription === false"
+            class="rounded bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 transition-colors"
+            @click="router.push(`/users/${userId}/subscription`)"
+          >
+            💳 サブスクリプション登録
+          </button>
+          <button
+            class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            :disabled="hasActiveSubscription !== true"
             @click="() => openGoalModal()"
+            :title="hasActiveSubscription !== true ? '目標を設定するには有効なサブスクリプションが必要です' : ''"
           >
             + 目標を追加
           </button>
