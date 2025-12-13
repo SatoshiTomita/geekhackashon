@@ -38,6 +38,6 @@
 //   functions.region = "asia-northeast1";
 //   if (process.env.NODE_ENV === "development") {
 //     // 開発時はlocalhostを参照する
-//     connectFunctionsEmulator(functions, "localhost", 5002);
+//     connectFunctionsEmulator(functions, "localhost", 5001);
 //   }
 // });
