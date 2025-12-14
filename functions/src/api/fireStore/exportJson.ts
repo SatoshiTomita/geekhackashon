@@ -130,10 +130,15 @@ async function getTodos(
     // 最後に"todo"コレクションを参照
     const todosRefCollection = todosRef.collection('todo');
     const todosSnap = await todosRefCollection.get();
-    const todos: TodoWithId[] = todosSnap.docs.map((todoDoc) => ({
-      id: todoDoc.id,
-      ...(todoDoc.data() as TodoDoc),
-    }));
+    const todos: TodoWithId[] = todosSnap.docs.map((todoDoc) => {
+      const data = todoDoc.data() as TodoDoc;
+      return {
+        id: todoDoc.id,
+        task: data.task,
+        isFinished: data.isFinished,
+        ...(data.weight !== undefined && { weight: data.weight }),
+      };
+    });
 
     return todos;
   } catch (e) {

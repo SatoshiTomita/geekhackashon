@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { onCall } from "firebase-functions/v2/https";
+import * as functions from "firebase-functions";
 
 // 型定義
 interface TodoDoc {
@@ -29,7 +30,9 @@ interface GoalWithSteps {
 
 // OpenAI APIクライアントの初期化
 const initOpenAI = () => {
-  const apiKey = process.env.OPENAI_API_KEY;
+  // ローカルの.env.localを優先、見つからなければFirebase Configから取得
+  const apiKey =
+    process.env.OPENAI_API_KEY || functions.config().openai_api_key?.key;
   console.log(
     "OPENAI_API_KEY loaded:",
     apiKey ? "Yes (length: " + apiKey.length + ")" : "No"
@@ -95,7 +98,14 @@ async function generateTaskList(prompt: string): Promise<GoalWithSteps> {
 3. todosは具体的な作業タスクです
 4. ratioは常に0から始めます
 5. isFinishedは常にfalseから始めます
-6. weightは重要度を表し、通常は1です
+6. weightはタスクの重要度・難易度・所要時間を表します。以下の基準で適切に割り当ててください：
+   - weight: 1 = 簡単なタスク、短時間で完了（例：メール送信、簡単な確認作業）
+   - weight: 2 = 標準的なタスク、通常の作業量（例：ドキュメント作成、通常のコーディング）
+   - weight: 3 = やや複雑なタスク、時間がかかる（例：複雑な機能実装、詳細な調査）
+   - weight: 5 = 重要または困難なタスク、かなりの時間を要する（例：大規模なリファクタリング、重要な意思決定）
+   - weight: 8 = 非常に複雑で重要なタスク、長期間を要する（例：アーキテクチャ設計、大規模な機能開発）
+   - タスクの内容を分析し、その複雑さ、重要度、所要時間を考慮して適切なweightを設定してください
+   - 同じステップ内のタスクでも、内容に応じてweightは異なることがあります
 7. 階層は論理的に構造化してください
 8. IDは重複しないようにしてください
 9. JSON以外の説明文は含めないでください

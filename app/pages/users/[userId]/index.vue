@@ -373,7 +373,7 @@ const generateWithAi = async () => {
       throw new Error("タスクリストの生成に失敗しました");
     }
 
-    generationProgress.value = "生成完了！Firestoreにインポート中...";
+    generationProgress.value = "あと少しです…";
 
     // 生成されたデータをFirestoreにインポート
     const importJson = httpsCallable($functions as any, "api_fireStore_importJson");
