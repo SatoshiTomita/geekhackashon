@@ -742,6 +742,8 @@ const handleDeleteTodo = async (
         :key="goal.id"
         :goal="goal"
         :saving="saving"
+        :user-id="userId"
+        :category-id="selectedCategoryId"
         @edit-goal="openGoalModal"
         @delete-goal="handleDeleteGoal"
         @add-step="(goalId: string) => openStepModal(goalId)"

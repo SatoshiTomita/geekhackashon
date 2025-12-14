@@ -28,6 +28,8 @@ type GoalWithSteps = {
 const props = defineProps<{
   goal: GoalWithSteps;
   saving: boolean;
+  userId?: string;
+  categoryId?: string;
 }>();
 
 // Emits
@@ -84,6 +86,73 @@ const emit = defineEmits<{
     currentStatus: boolean,
   ): void;
 }>();
+
+// Bet機能の状態
+const showBetModal = ref(false);
+const betAmount = ref<number | null>(null);
+const betLoading = ref(false);
+const betError = ref("");
+
+// Betモーダルを開く
+const openBetModal = () => {
+  showBetModal.value = true;
+  betAmount.value = null;
+  betError.value = "";
+};
+
+// Betモーダルを閉じる
+const closeBetModal = () => {
+  showBetModal.value = false;
+  betAmount.value = null;
+  betError.value = "";
+};
+
+// Stripe決済セッションを作成して遷移
+const handleBet = async () => {
+  if (!betAmount.value || betAmount.value <= 0) {
+    betError.value = "金額を入力してください";
+    return;
+  }
+
+  if (!props.userId || !props.categoryId) {
+    betError.value = "ユーザー情報が不足しています";
+    return;
+  }
+
+  try {
+    betLoading.value = true;
+    betError.value = "";
+
+    const { $functions } = useNuxtApp();
+    const { httpsCallable } = await import("firebase/functions");
+
+    const createBetSession = httpsCallable(
+      $functions as any,
+      "api_stripe_createBetSession",
+    );
+
+    const result = await createBetSession({
+      userId: props.userId,
+      categoryId: props.categoryId,
+      goalId: props.goal.id,
+      amount: betAmount.value,
+      origin: window.location.origin,
+    });
+
+    const resultData = result.data as any;
+    if (!resultData.success || !resultData.url) {
+      throw new Error("決済セッションの作成に失敗しました");
+    }
+
+    // Stripe決済画面に遷移
+    window.location.href = resultData.url;
+  } catch (err: any) {
+    console.error("Bet error:", err);
+    betError.value = err?.message || "決済処理に失敗しました";
+  } finally {
+    betLoading.value = false;
+  }
+};
 
 const RoadmapStep: ReturnType<typeof defineComponent> = defineComponent({
   name: "RoadmapStep",
@@ -447,6 +516,12 @@ const RoadmapStep: ReturnType<typeof defineComponent> = defineComponent({
 
         <div class="flex gap-2">
           <button
+            class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm font-semibold"
+            :disabled="saving"
+            @click="openBetModal">
+            💰 Bet
+          </button>
+          <button
             class="p-2 hover:bg-gray-100 rounded"
             :disabled="saving"
             @click="$emit('edit-goal', props.goal.id, props.goal.title)">
@@ -580,7 +655,56 @@ const RoadmapStep: ReturnType<typeof defineComponent> = defineComponent({
       + 目標追加
     </button>
   </div>
-</div>
+    </div>
+  </div>
+
+  <!-- Betモーダル -->
+  <div
+    v-if="showBetModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    @click.self="closeBetModal"
+  >
+    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <h3 class="text-xl font-bold mb-4 text-gray-800">目標に賭ける</h3>
+      <p class="text-sm text-gray-600 mb-4">
+        目標「{{ props.goal.title }}」に賭ける金額を入力してください
+      </p>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          金額（円）
+        </label>
+        <input
+          v-model.number="betAmount"
+          type="number"
+          min="1"
+          step="1"
+          placeholder="1000"
+          class="w-full rounded-lg border border-gray-300 p-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          :disabled="betLoading"
+        />
+      </div>
+
+      <p v-if="betError" class="mb-4 text-sm text-red-600">{{ betError }}</p>
+
+      <div class="flex gap-3 justify-end">
+        <button
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+          :disabled="betLoading"
+          @click="closeBetModal"
+        >
+          キャンセル
+        </button>
+        <button
+          class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50"
+          :disabled="betLoading"
+          @click="handleBet"
+        >
+          <span v-if="betLoading">処理中...</span>
+          <span v-else>決済に進む</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
