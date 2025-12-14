@@ -940,6 +940,53 @@ export const useFireStore = () => {
       // カテゴリの達成率も更新
       await updateCategoryRatio(uid, categoryId);
 
+      // 賭け金がある場合、返還処理をチェック
+      try {
+        const goalRef = doc(
+          db,
+          "users",
+          uid,
+          "category",
+          categoryId,
+          "goals",
+          goalId,
+        );
+        const goalSnap = await getDoc(goalRef);
+        if (goalSnap.exists()) {
+          const goalData = goalSnap.data();
+          const betAmount = goalData?.betAmount as number | undefined;
+          const isLocked = goalData?.isLocked as boolean | undefined;
+
+          // 賭け金があり、決済が完了している場合のみ返還処理を実行
+          if (betAmount && betAmount > 0 && isLocked) {
+            const { $functions } = useNuxtApp();
+            const { httpsCallable } = await import("firebase/functions");
+
+            const processRefund = httpsCallable(
+              $functions as any,
+              "api_stripe_processRefundForGoal",
+            );
+
+            // 返還処理を非同期で実行（エラーが発生しても達成率の更新は続行）
+            processRefund({
+              userId: uid,
+              categoryId,
+              goalId,
+              currentRatio: ratio,
+            })
+              .then((result) => {
+                console.log("Refund processing result:", result);
+              })
+              .catch((error) => {
+                console.error("Refund processing error:", error);
+              });
+          }
+        }
+      } catch (error) {
+        // 返還処理のエラーは達成率の更新を妨げない
+        console.error("Error checking refund:", error);
+      }
+
       return ratio;
     } catch (error) {
       console.error("Error calculating goal ratio:", error);

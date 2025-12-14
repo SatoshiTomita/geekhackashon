@@ -27,7 +27,7 @@ const initStripe = (): Stripe => {
   }
 
   return new Stripe(secretKey, {
-    apiVersion: "2024-12-18.acacia",
+    apiVersion: "2025-11-17.clover",
   });
 };
 
@@ -99,10 +99,10 @@ export const createBetSession = onCall(
       });
 
       // 決済情報をFirestoreに保存（保留状態）
+      // paymentIntentIdは決済完了後にhandleCheckoutSessionで保存される
       await goalRef.set(
         {
           betAmount: amount,
-          paymentIntentId: session.id,
           isLocked: false, // 決済完了後にtrueになる
         },
         { merge: true }

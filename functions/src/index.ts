@@ -22,6 +22,8 @@ const funcs = {
   api_fireStore_importJson: './api/fireStore/importJson',
   api_gemini_generateTaskListFromPrompt: './api/gemini/generate',
   api_stripe_createBetSession: './api/stripe/createBetSession',
+  api_stripe_handleCheckoutSession: './api/stripe/handleCheckoutSession',
+  api_stripe_processRefundForGoal: './api/stripe/processRefundForGoal',
 };
 
 const loadFunctions = (functionsObj: FunctionsObj) => {
@@ -40,6 +42,10 @@ const loadFunctions = (functionsObj: FunctionsObj) => {
         module.exports[functionName] = importedModule.generateTaskListFromPrompt;
       } else if (importedModule.createBetSession) {
         module.exports[functionName] = importedModule.createBetSession;
+      } else if (importedModule.handleCheckoutSession) {
+        module.exports[functionName] = importedModule.handleCheckoutSession;
+      } else if (importedModule.processRefundForGoal) {
+        module.exports[functionName] = importedModule.processRefundForGoal;
       } else {
         // CommonJS形式の場合（default exportなど）
         module.exports[functionName] = importedModule;
