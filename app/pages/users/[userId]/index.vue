@@ -24,34 +24,40 @@ const categoryMeta = {
     color: "#E7000B",
     bg: "#FEF2F2",
     progressBg: "linear-gradient(90deg, #FF7549 0%, #FF2F5A 100%)",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dumbbell-icon lucide-dumbbell"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/></svg>`,
-    label: "健康達成率:",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dumbbell-icon lucide-dumbbell"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/></svg>`, 
+    label: '元気チャレンジ',
+    tagline: 'カラダ、整ってる？'
   },
   life: {
     color: "#00A63E",
     bg: "#F0FDF4",
-    progressBg:
-      "var(--gradientGreen, linear-gradient(90deg, #00DF73 0%, #0DB87E 100%))",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-coffee-icon lucide-coffee"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>`,
-    label: "生活達成率:",
+    progressBg:"var(--gradientGreen, linear-gradient(90deg, #00DF73 0%, #0DB87E 100%))",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-coffee-icon lucide-coffee"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>`, 
+    label: 'ライフバランス',
+    tagline: '今日の生活、ちょっと快適に！'
   },
   study: {
     color: "#155DFC",
     bg: "#EFF6FF",
-    progressBg:
-      "var(--gradient-blue, linear-gradient(90deg, #4FA3FF 0%, #00B7DC 100%))",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-icon lucide-book-open"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>`,
-    label: "学習達成率:",
+    progressBg:"var(--gradient-blue, linear-gradient(90deg, #4FA3FF 0%, #00B7DC 100%))",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-icon lucide-book-open"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>`, 
+    label: '勉強しよう',
+    tagline: 'スキルアップ、進んでる？'
   },
   work: {
     color: "#4F39F6",
     bg: "#EEF2FF",
-    progressBg:
-      "var(--gradient-purple, linear-gradient(90deg, #8083FF 0%, #AC48FF 100%))",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-icon lucide-briefcase"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>`,
-    label: "仕事達成率:",
+    progressBg:"var(--gradient-purple, linear-gradient(90deg, #8083FF 0%, #AC48FF 100%))",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-icon lucide-briefcase"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>`, 
+    label: '仕事力アップ',
+    tagline: '一歩ずつ、前進しよう！'
   },
 };
+
+// 100%達成時に表示するクラウンアイコン
+const crownIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-crown-icon lucide-crown"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>`;
+// 50%以上で表示するスマイルアイコン
+const sparklesIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>`;
 
 // 選択中のカテゴリ
 const selectedCategoryId = ref<string>("health");
@@ -106,6 +112,154 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const categoryRatio = ref<number>(0);
 
+// 前回の達成率を保持
+const prevCategoryRatio = ref<number>(0);
+// かわいい達成サウンド（2音チャイム＋柔らかいアタック）
+const playAchievementSound = () => {
+  try {
+    const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+    const audioCtx = new AudioCtx();
+    // Master gain for overall volume control
+    const master = audioCtx.createGain();
+    master.gain.value = 0.2; // modest volume
+    master.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    // Helper to create a chime tone with envelope
+    const makeTone = (freq: number, detune: number, start: number, duration: number, type: OscillatorType = "sine") => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now + start);
+      osc.detune.setValueAtTime(detune, now + start);
+      // Soft attack and quick decay (AD envelope)
+      gain.gain.setValueAtTime(0.0001, now + start);
+      gain.gain.exponentialRampToValueAtTime(0.7, now + start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + start + duration);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(now + start);
+      osc.stop(now + start + duration + 0.02);
+    };
+    // Two-note chime: major third up (sweet interval)
+    // Base note ~ G6 (1568 Hz), then B6 (~1975 Hz)
+    makeTone(1568, -5, 0.0, 0.18, "sine");
+    makeTone(1568, +5, 0.0, 0.18, "triangle"); // slight detune layer for warmth
+    makeTone(1975, 0, 0.12, 0.22, "sine");
+    // Optional subtle shimmer (quiet noise burst filtered)
+    const noise = audioCtx.createBufferSource();
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.2;
+    noise.buffer = buffer;
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0.0001, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.05, now + 0.02);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    noise.connect(noiseGain);
+    noiseGain.connect(master);
+    noise.start(now);
+    noise.stop(now + 0.22);
+  } catch (e) {
+    console.warn("Achievement sound unavailable:", e);
+  }
+};
+// 50%到達時のもう少しリッチなチャイム
+const playMilestone50Sound = () => {
+  try {
+    const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+    const audioCtx = new AudioCtx();
+    const master = audioCtx.createGain();
+    master.gain.value = 0.25;
+    master.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    const makeTone = (freq: number, start: number, duration: number, type: OscillatorType = "sine", detune = 0, peak = 0.8) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now + start);
+      osc.detune.setValueAtTime(detune, now + start);
+      gain.gain.setValueAtTime(0.0001, now + start);
+      gain.gain.exponentialRampToValueAtTime(peak, now + start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + start + duration);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(now + start);
+      osc.stop(now + start + duration + 0.02);
+    };
+    // Three-note arpeggio: I–III–V (pleasant, complete)
+    makeTone(1318, 0.00, 0.20, "sine", -4); // E6
+    makeTone(1568, 0.10, 0.22, "triangle", +4); // G6
+    makeTone(1975, 0.22, 0.24, "sine", 0); // B6
+    // Soft chime bell overlay
+    makeTone(2637, 0.22, 0.18, "sine", 0, 0.5); // E7
+  } catch (e) {
+    console.warn("Milestone 50 sound unavailable:", e);
+  }
+};
+// 100%到達時のお祝いサウンド（大きめ）
+const playMilestone100Sound = () => {
+  try {
+    const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+    const audioCtx = new AudioCtx();
+    const master = audioCtx.createGain();
+    master.gain.value = 0.3; // a bit louder
+    master.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    const makeTone = (freq: number, start: number, duration: number, type: OscillatorType = "sine", detune = 0, attack = 0.02, sustain = 0.9) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now + start);
+      osc.detune.setValueAtTime(detune, now + start);
+      gain.gain.setValueAtTime(0.0001, now + start);
+      gain.gain.exponentialRampToValueAtTime(sustain, now + start + attack);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + start + duration);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(now + start);
+      osc.stop(now + start + duration + 0.05);
+    };
+    // Triumphant chord layers (E major): E–G#–B with octave
+    makeTone(659, 0.00, 0.60, "triangle", 0, 0.02, 0.8); // E5
+    makeTone(831, 0.00, 0.60, "sine", +3, 0.02, 0.7); // G#5
+    makeTone(988, 0.00, 0.60, "sine", -3, 0.02, 0.7); // B5
+    makeTone(1318, 0.00, 0.50, "sine", 0, 0.02, 0.6); // E6
+    // Short rising flourish
+    const flourish = audioCtx.createOscillator();
+    const flourishGain = audioCtx.createGain();
+    flourish.type = "sine";
+    flourish.frequency.setValueAtTime(880, now + 0.05);
+    flourish.frequency.linearRampToValueAtTime(1760, now + 0.45);
+    flourishGain.gain.setValueAtTime(0.0001, now + 0.05);
+    flourishGain.gain.exponentialRampToValueAtTime(0.5, now + 0.08);
+    flourishGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+    flourish.connect(flourishGain);
+    flourishGain.connect(master);
+    flourish.start(now + 0.05);
+    flourish.stop(now + 0.5);
+  } catch (e) {
+    console.warn("Milestone 100 sound unavailable:", e);
+  }
+};
+// 達成率が上がった時だけサウンドを鳴らす
+watch(categoryRatio, (newVal, oldVal) => {
+  const previous = typeof oldVal === "number" ? oldVal : prevCategoryRatio.value;
+  const current = typeof newVal === "number" ? newVal : 0;
+  if (current > previous) {
+    // 小さな増加時の軽いチャイム
+    playAchievementSound();
+    // 50%を跨いだ時（previous < 50 <= current）
+    if (previous < 50 && current >= 50) {
+      playMilestone50Sound();
+    }
+    // 100%達成時（previous < 100 <= current）
+    if (previous < 100 && current >= 100) {
+      playMilestone100Sound();
+    }
+  }
+  prevCategoryRatio.value = current;
+});
+
 // モーダル状態
 const showStepModal = ref(false);
 const showTodoModal = ref(false);
@@ -152,6 +306,8 @@ const fetchRoadmapData = async () => {
     // カテゴリ達成率を取得
     const ratio = await getCategoryRatio(userId, selectedCategoryId.value);
     categoryRatio.value = ratio;
+    // 初期値を最新に合わせる（初回ロードで音が鳴らないように）
+    prevCategoryRatio.value = ratio;
   } catch (err: any) {
     console.error("Error fetching roadmap data:", err);
     error.value = err?.message || "ロードマップデータの取得に失敗しました";
@@ -684,7 +840,7 @@ const handleDeleteTodo = async (
       >
         <!-- Gradient-stroked icon to match title colors -->
         <svg
-          class="size-8"
+          class="size-10"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
@@ -738,11 +894,12 @@ const handleDeleteTodo = async (
         <button
           v-for="category in categories"
           :key="category.id"
-          :class="`py-4 px-1 border-b-2 font-medium text-sm ${
-            selectedCategoryId === category.id
-              ? 'border-blue-500 text-blue-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-          }`"
+          class="py-4 px-1 border-b-2 font-medium text-sm transition-colors"
+          :style="selectedCategoryId === category.id
+            ? { color: categoryMeta[category.id].color, borderColor: categoryMeta[category.id].color }
+            : { color: '#6B7280', borderColor: 'transparent' }"
+          @mouseover="(e: MouseEvent) => { if (selectedCategoryId !== category.id) (e.currentTarget as HTMLElement).style.color = '#374151'; }"
+          @mouseout="(e: MouseEvent) => { if (selectedCategoryId !== category.id) (e.currentTarget as HTMLElement).style.color = '#6B7280'; }"
           @click="changeCategory(category.id)"
         >
           {{ category.label }}
@@ -767,9 +924,13 @@ const handleDeleteTodo = async (
           :style="{ color: categoryMeta[selectedCategoryId]?.color }"
         >
           <div class="category-icon-circle mr-3">
-            <span v-html="categoryMeta[selectedCategoryId]?.icon"></span>
+            <span v-html="categoryRatio >= 100 ? crownIcon : (categoryRatio >= 50 ? sparklesIcon : categoryMeta[selectedCategoryId]?.icon)"></span>
           </div>
-          {{ categoryMeta[selectedCategoryId]?.label }} {{ categoryRatio }}%
+          <div class="flex flex-col">
+            <span>{{ categoryMeta[selectedCategoryId]?.label }}</span>
+            <span class="mt-1 text-sm font-normal text-slate-600">{{ categoryMeta[selectedCategoryId]?.tagline }}</span>
+          </div>
+
         </h2>
         <div class="mt-3 flex items-center gap-3">
           <div class="progress-track flex-1">
@@ -780,6 +941,9 @@ const handleDeleteTodo = async (
                 background: categoryMeta[selectedCategoryId]?.progressBg,
               }"
             ></div>
+          </div>
+          <div class="text-right font-extrabold whitespace-nowrap" :style="{ color: categoryMeta[selectedCategoryId]?.color }">
+            {{ categoryRatio }}% 完了
           </div>
         </div>
       </div>
@@ -1093,8 +1257,19 @@ const handleDeleteTodo = async (
 }
 
 .category-icon-circle svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem; /* ~28px */
+  height: 1.75rem;
+}
+@keyframes icon-bob {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-2px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+/* Pause the bobbing on hover to reduce distraction */
+.category-icon-circle:hover {
+  animation-play-state: paused;
 }
 
 .progress-track {
